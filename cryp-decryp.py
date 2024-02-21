@@ -5,6 +5,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import base64
+import sys
 
 def generate_key(password, salt):
     kdf = PBKDF2HMAC(
@@ -67,23 +68,31 @@ def decrypt_text(password, ciphertext):
     return unpadded_plaintext.decode()
 
 def main():
-    print("Что вы хотите сделать?")
-    print("1. Зашифровать")
-    print("2. Расшифровать")
-    choice = input("Введите номер выбранного действия: ")
+    while True:
+        print("Что вы хотите сделать?")
+        print("1. Зашифровать")
+        print("2. Расшифровать")
+        choice = input("Введите номер выбранного действия: ")
 
-    if choice == "1":
-        password = input("Введите пароль: ")
-        plaintext = input("Введите текст для шифрования: ")
-        encrypted_text = encrypt_text(password, plaintext)
-        print("Зашифрованный текст:", base64.urlsafe_b64encode(encrypted_text).decode())
-    elif choice == "2":
-        password = input("Введите пароль: ")
-        ciphertext = base64.urlsafe_b64decode(input("Введите зашифрованный текст: "))
-        decrypted_text = decrypt_text(password, ciphertext)
-        print("Расшифрованный текст:", decrypted_text)
-    else:
-        print("Неверный выбор")
+        if choice == "1":
+            password = input("Введите пароль: ")
+            plaintext = input("Введите текст для шифрования: ")
+            encrypted_text = encrypt_text(password, plaintext)
+            print("Зашифрованный текст:", base64.urlsafe_b64encode(encrypted_text).decode())
+        elif choice == "2":
+            password = input("Введите пароль: ")
+            try:
+                ciphertext = base64.urlsafe_b64decode(input("Введите зашифрованный текст: "))
+            except:
+                print("Ошибка: неверный формат ввода зашифрованного текста.")
+                continue
+            decrypted_text = decrypt_text(password, ciphertext)
+            print("Расшифрованный текст:", decrypted_text)
+        else:
+            print("Неверный выбор")
+
+        input("Нажмите Enter, чтобы продолжить...")
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 if __name__ == "__main__":
     main()
