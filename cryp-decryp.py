@@ -69,6 +69,8 @@ def decrypt_text(password, ciphertext):
 
 def main():
     while True:
+        print("\033[H\033[J")  # Очистка экрана терминала
+
         print("Что вы хотите сделать?")
         print("1. Зашифровать")
         print("2. Расшифровать")
@@ -85,6 +87,7 @@ def main():
                 ciphertext = base64.urlsafe_b64decode(input("Введите зашифрованный текст: "))
             except:
                 print("Ошибка: неверный формат ввода зашифрованного текста.")
+                input("Нажмите Enter, чтобы продолжить...")
                 continue
             decrypted_text = decrypt_text(password, ciphertext)
             print("Расшифрованный текст:", decrypted_text)
@@ -92,7 +95,6 @@ def main():
             print("Неверный выбор")
 
         input("Нажмите Enter, чтобы продолжить...")
-        os.system('cls' if os.name == 'nt' else 'clear')
 
 if __name__ == "__main__":
     main()
