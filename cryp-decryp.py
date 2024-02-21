@@ -49,8 +49,13 @@ def decrypt_text(password, ciphertext):
     # Генерация ключа на основе пароля и соли
     key = generate_key(password, salt)
 
+    # Попытка создать объект шифра
+    try:
+        cipher = Cipher(algorithms.AES(key), modes.CBC(salt), backend=default_backend())
+    except TypeError:
+        return "Ошибка: неправильный пароль"
+
     # Настройка алгоритма дешифрования
-    cipher = Cipher(algorithms.AES(key), modes.CBC(salt), backend=default_backend())
     decryptor = cipher.decryptor()
 
     # Расшифровка данных
